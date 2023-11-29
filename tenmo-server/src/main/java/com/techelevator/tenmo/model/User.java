@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.model;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -9,20 +10,23 @@ public class User {
    private Long id;
    private String username;
    private String password;
-
-   private Integer balance;
+   private BigDecimal balance;
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
 
-   public User() { }
+   public User() {
+      this.activated = true;
+   }
 
-   public User(Long id, String username, String password, Integer balance, String authorities) {
+   public User(Long id, String username, String password, BigDecimal balance, String authorities) {
+      this();
       this.id = id;
       this.username = username;
       this.password = password;
       this.balance = balance;
-      this.activated = true;
+      setAuthorities(authorities);
    }
+
 
    public Long getId() {
       return id;
@@ -48,12 +52,16 @@ public class User {
       this.password = password;
    }
 
-   public void setBalance(Integer balance){
+   public BigDecimal getBalance() {
+      return balance;
+   }
+
+   public void setBalance(BigDecimal balance) {
       this.balance = balance;
    }
 
-   public Integer getBalance(){
-      return balance;
+   public void setBalance(int balance) {
+      this.balance = BigDecimal.valueOf(balance);
    }
 
    public boolean isActivated() {
@@ -73,9 +81,10 @@ public class User {
    }
 
    public void setAuthorities(String authorities) {
+      this.authorities.clear();
       String[] roles = authorities.split(",");
-      for(String role : roles) {
-         this.authorities.add(new Authority("ROLE_" + role));
+      for (String role : roles) {
+         this.authorities.add(new Authority("ROLE_" + role.trim()));
       }
    }
 
@@ -84,10 +93,11 @@ public class User {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       User user = (User) o;
-      return id == user.id &&
-              activated == user.activated &&
+      return activated == user.activated &&
+              Objects.equals(id, user.id) &&
               Objects.equals(username, user.username) &&
               Objects.equals(password, user.password) &&
+              Objects.equals(balance, user.balance) &&
               Objects.equals(authorities, user.authorities);
    }
 

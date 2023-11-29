@@ -78,16 +78,11 @@ public class JdbcUserDao implements UserDao {
         String sqlAccount = "INSERT INTO account (user_id, balance) VALUES (?, 1000)";
         jdbcTemplate.update(sqlAccount, userId);
     }
-    public BigDecimal getBalance(int userId) {
+    public BigDecimal getBalance(int userId){
         String sql = "SELECT balance FROM account WHERE user_id = ?";
         return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
     }
-    public BigDecimal getBalance(int userId){
-        String sql = "SELECT balance\\n\" +\n" +
-                "                \"FROM tenmo_user\\n\" +\n" +
-                "                \"WHERE user_id = ?\"";
-       return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
-    }
+
 
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
