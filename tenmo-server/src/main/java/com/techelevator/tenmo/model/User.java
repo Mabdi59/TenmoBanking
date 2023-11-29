@@ -9,15 +9,18 @@ public class User {
    private Long id;
    private String username;
    private String password;
+
+   private Integer balance;
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
 
    public User() { }
 
-   public User(Long id, String username, String password, String authorities) {
+   public User(Long id, String username, String password, Integer balance, String authorities) {
       this.id = id;
       this.username = username;
       this.password = password;
+      this.balance = balance;
       this.activated = true;
    }
 
@@ -43,6 +46,14 @@ public class User {
 
    public void setPassword(String password) {
       this.password = password;
+   }
+
+   public void setBalance(Integer balance){
+      this.balance = balance;
+   }
+
+   public Integer getBalance(){
+      return balance;
    }
 
    public boolean isActivated() {
@@ -82,7 +93,7 @@ public class User {
 
    @Override
    public int hashCode() {
-      return Objects.hash(id, username, password, activated, authorities);
+      return Objects.hash(id, username, password, balance, activated, authorities);
    }
 
    @Override
@@ -91,6 +102,7 @@ public class User {
               "id=" + id +
               ", username='" + username + '\'' +
               ", activated=" + activated +
+              ", balance=" + balance +
               ", authorities=" + authorities +
               '}';
    }
