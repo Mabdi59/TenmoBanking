@@ -35,7 +35,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user;";
+        String sql = "SELECT user_id, username, password_hash, balance FROM tenmo_user;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while(results.next()) {
             User user = mapRowToUser(results);
@@ -46,13 +46,15 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User findByUsername(String username) throws UsernameNotFoundException {
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE username ILIKE ?;";
+        String sql = "SELECT user_id, username, password_hash, balance FROM tenmo_user WHERE username ILIKE ?;";
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
         if (rowSet.next()){
             return mapRowToUser(rowSet);
         }
         throw new UsernameNotFoundException("User " + username + " was not found.");
     }
+
+
 
     @Override
     public boolean create(String username, String password) {
@@ -80,12 +82,19 @@ public class JdbcUserDao implements UserDao {
         String sql = "SELECT balance FROM account WHERE user_id = ?";
         return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
     }
+    public BigDecimal getBalance(int userId){
+        String sql = "SELECT balance\\n\" +\n" +
+                "                \"FROM tenmo_user\\n\" +\n" +
+                "                \"WHERE user_id = ?\"";
+       return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
+    }
 
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
         user.setId(rs.getLong("user_id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password_hash"));
+        user.setBalance(rs.getInt("balance"));
         user.setActivated(true);
         user.setAuthorities("USER");
         return user;

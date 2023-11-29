@@ -9,6 +9,8 @@ public class RegisterUserDTO {
     @NotEmpty
     private String password;
 
+    private Integer balance;
+
     public String getUsername() {
         return username;
     }
@@ -23,5 +25,12 @@ public class RegisterUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getBalance(){
+        return balance;
+    }
+    public void setBalance(){
+        this.balance = balance;
     }
 }

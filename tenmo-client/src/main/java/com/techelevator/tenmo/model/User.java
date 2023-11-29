@@ -6,6 +6,7 @@ public class User {
 
     private int id;
     private String username;
+    private int balance = 1000;
 
     public int getId() {
         return id;
@@ -17,6 +18,9 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+    public int getBalance(){
+        return balance;
     }
 
     public void setUsername(String username) {
