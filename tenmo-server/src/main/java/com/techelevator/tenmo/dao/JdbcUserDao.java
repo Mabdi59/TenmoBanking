@@ -56,20 +56,29 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public boolean create(String username, String password) {
-
-        // create user
-        String sql = "INSERT INTO tenmo_user (username, password_hash) VALUES (?, ?) RETURNING user_id";
-        String password_hash = new BCryptPasswordEncoder().encode(password);
+        String sqlUser = "INSERT INTO tenmo_user (username, password_hash) VALUES (?, ?) RETURNING user_id";
+        String passwordHash = new BCryptPasswordEncoder().encode(password);
         Integer newUserId;
         try {
-            newUserId = jdbcTemplate.queryForObject(sql, Integer.class, username, password_hash);
+            newUserId = jdbcTemplate.queryForObject(sqlUser, Integer.class, username, passwordHash);
         } catch (DataAccessException e) {
             return false;
         }
 
-        // TODO: Create the account record with initial balance
+        if (newUserId != null) {
+            createAccount(newUserId);
+        }
 
-        return true;
+        return newUserId != null;
+    }
+
+    private void createAccount(int userId) {
+        String sqlAccount = "INSERT INTO account (user_id, balance) VALUES (?, 1000)";
+        jdbcTemplate.update(sqlAccount, userId);
+    }
+    public BigDecimal getBalance(int userId) {
+        String sql = "SELECT balance FROM account WHERE user_id = ?";
+        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
     }
 
     private User mapRowToUser(SqlRowSet rs) {
