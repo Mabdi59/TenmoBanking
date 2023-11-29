@@ -14,6 +14,7 @@ CREATE TABLE tenmo_user (
 	user_id int NOT NULL DEFAULT nextval('seq_user_id'),
 	username varchar(50) NOT NULL,
 	password_hash varchar(200) NOT NULL,
+	balance dec default(1000),
 	CONSTRAINT PK_tenmo_user PRIMARY KEY (user_id),
 	CONSTRAINT UQ_username UNIQUE (username)
 );
