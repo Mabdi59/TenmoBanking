@@ -34,5 +34,17 @@ CREATE TABLE account (
 	CONSTRAINT FK_account_tenmo_user FOREIGN KEY (user_id) REFERENCES tenmo_user (user_id)
 );
 
+CREATE TABLE transfer (
+	transfer_id serial,
+	from_user_id int NOT NULL,
+	to_user_id int NOT NULL,
+	amount decimal NOT NULL,
+	approved boolean NOT NULL,
+	CONSTRAINT PK_transfer PRIMARY KEY(transfer_id),
+	CONSTRAINT FK_transfer_from_user FOREIGN KEY (from_user_id) REFERENCES tenmo_user(user_id),
+	CONSTRAINT FK_to_user_id FOREIGN KEY (to_user_id) REFERENCES tenmo_user (user_id),
+	CHECK(from_user_id != to_user_id),
+	CHECK(amount > 0)
+);
 
 COMMIT;
