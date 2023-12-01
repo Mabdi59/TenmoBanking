@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class TransferDAO {
@@ -21,6 +23,8 @@ public class TransferDAO {
     public boolean createTransfer(Transfer transfer) {
         BigDecimal senderBalance = getBalance(transfer.getFromUserId());
         if (senderBalance.compareTo(transfer.getAmount()) < 0) {
+            String sql = "INSERT INTO transfer(from_user_id, to_user_id, amount, approved) VALUES(?,?,?,?);";
+            jdbcTemplate.update(sql, 0,0,0, false);
             throw new IllegalStateException("insufficient funds for transfer");
         }
 
@@ -38,13 +42,25 @@ public class TransferDAO {
         return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
     }
 
-    private Transfer mapRowToTransfer() {
+    public Transfer getTransferById(Long transferId) {
+        String sql = "SELECT * FROM transfer WHERE transfer_id = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, transferId);
+
+       if(result.next()) {
+           return mapRowToTransfer(result);
+
+           }else {
+           return null;
+       }
+    }
+
+    private Transfer mapRowToTransfer(SqlRowSet result) {
         Transfer transfer = new Transfer();
         transfer.setTransferId(transfer.getTransferId());
         transfer.setAmount(transfer.getAmount());
         transfer.setFromUserId(transfer.getFromUserId());
         transfer.setToUserId(transfer.getToUserId());
-        transfer.setApproved(true);
+        transfer.setApproved(transfer.getApproved());
         return transfer;
     }
 }
