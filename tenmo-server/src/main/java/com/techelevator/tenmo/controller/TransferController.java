@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.controller;
 
+import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Transfer;
@@ -22,7 +23,7 @@ public class TransferController {
     }
 
     @RequestMapping(path = "/transfer", method = RequestMethod.POST)
-public ResponseEntity<?> createTransfer(@RequestBody Transfer transfer, Principal authentication) {
+    public ResponseEntity<?> createTransfer(@RequestBody Transfer transfer, Principal authentication) {
         String currentUsername = authentication.getName();
         boolean transferCreated = transferDao.createTransfer(transfer);
         if(transferCreated){
@@ -31,6 +32,8 @@ public ResponseEntity<?> createTransfer(@RequestBody Transfer transfer, Principa
             return new ResponseEntity<>(transfer, HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
     @RequestMapping(path = "/transfer/{transferId}", method = RequestMethod.GET)
     public Transfer getTransfer(@PathVariable Long transferId) {

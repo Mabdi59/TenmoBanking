@@ -56,11 +56,11 @@ public class TransferDAO {
 
     private Transfer mapRowToTransfer(SqlRowSet result) {
         Transfer transfer = new Transfer();
-        transfer.setTransferId(transfer.getTransferId());
-        transfer.setAmount(transfer.getAmount());
-        transfer.setFromUserId(transfer.getFromUserId());
-        transfer.setToUserId(transfer.getToUserId());
-        transfer.setApproved(transfer.getApproved());
+        transfer.setTransferId(result.getLong("transfer_id"));
+        transfer.setFromUserId(result.getLong("from_user_id"));
+        transfer.setToUserId(result.getLong("to_user_id"));
+        transfer.setAmount(result.getBigDecimal("amount"));
+        transfer.setApproved(result.getBoolean("approved"));
         return transfer;
     }
 }
