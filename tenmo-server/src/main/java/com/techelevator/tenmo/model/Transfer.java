@@ -8,6 +8,7 @@ public class Transfer {
     private Long toUserId;
     private BigDecimal amount;
     private Boolean approved = true;
+    private String status;
 
     public Long getTransferId(){
         return transferId;
@@ -38,6 +39,13 @@ public class Transfer {
     }
     public void setApproved(boolean approved){
         this.approved = approved;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
     public Transfer(){
 
