@@ -1,10 +1,18 @@
-
-
-{"transfer between accounts example"}
+localhost:8080/register
+localhost:8080/login
 {
-  "amount": 0,
-  "fromUserId": "",
-  "toUserId": "",
-  "status": "Approved"
+"username": "user#",
+"password": "password"
 }
 
+localhost:8080/balance
+
+localhost:8080/transfer
+{
+"amount": #,
+"fromUserId": "100#",
+"toUserId": "100#",
+"status": "Approved"
+}
+
+localhost:8080/transfer/#
